@@ -1,0 +1,376 @@
+<div class="admin-page">
+  <div class="container">
+    <div class="section-heading">
+      <h2>{{ 'ADMIN.DASHBOARD' | translate }}</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div *ngIf="errorMessage()" class="error-banner" (click)="clearError()">
+      {{ errorMessage() }} <span class="error-close">✕</span>
+    </div>
+
+    <div class="admin-layout">
+      <!-- Sidebar -->
+      <aside class="admin-sidebar">
+        <div class="admin-sidebar__brand">
+          <h2>{{ 'ADMIN.PANEL' | translate }}</h2>
+          <p>{{ 'ADMIN.MANAGE_RESTAURANT' | translate }}</p>
+        </div>
+        <nav class="admin-nav">
+          <button class="admin-nav-item" [class.active]="activeTab() === 'orders'" (click)="switchTab('orders')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            {{ 'ADMIN.ORDERS' | translate }}
+          </button>
+          <button class="admin-nav-item" [class.active]="activeTab() === 'products'" (click)="switchTab('products')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+            </svg>
+            {{ 'ADMIN.PRODUCTS' | translate }}
+          </button>
+          <button class="admin-nav-item" [class.active]="activeTab() === 'users'" (click)="switchTab('users')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+            {{ 'ADMIN.USERS' | translate }}
+          </button>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="admin-content">
+
+        <!-- Stats -->
+        <div class="admin-stats">
+          <div class="stat-card">
+            <div class="stat-card__top">
+              <span class="stat-card__label">{{ 'ADMIN.TOTAL_ORDERS' | translate }}</span>
+              <div class="stat-card__icon stat-card__icon--orange">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">{{ stats().totalOrders }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__top">
+              <span class="stat-card__label">{{ 'ADMIN.TOTAL_REVENUE' | translate }}</span>
+              <div class="stat-card__icon stat-card__icon--green">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">${{ stats().totalRevenue?.toFixed(2) || '0.00' }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__top">
+              <span class="stat-card__label">{{ 'ADMIN.PENDING' | translate }}</span>
+              <div class="stat-card__icon stat-card__icon--yellow">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">{{ stats().ordersByStatus?.pending || 0 }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__top">
+              <span class="stat-card__label">{{ 'ADMIN.COMPLETED' | translate }}</span>
+              <div class="stat-card__icon stat-card__icon--blue">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">{{ stats().ordersByStatus?.completed || 0 }}</div>
+          </div>
+        </div>
+
+        <!-- ═══════════ ORDERS TAB ═══════════ -->
+        <div *ngIf="activeTab() === 'orders'" class="admin-table-panel animate-fade-in">
+          <div class="admin-table-panel__header">
+            <h3>{{ 'ADMIN.RECENT_ORDERS' | translate }}</h3>
+            <button class="btn btn-ghost btn-sm" (click)="loadOrders()">↻ {{ 'ADMIN.REFRESH' | translate }}</button>
+          </div>
+          <div *ngIf="ordersLoading()" class="loading-spinner">{{ 'ADMIN.LOADING_ORDERS' | translate }}</div>
+          <div *ngIf="!ordersLoading() && orders().length === 0" class="empty-state">{{ 'ADMIN.NO_ORDERS' | translate }}</div>
+          <div *ngIf="!ordersLoading() && orders().length > 0" class="admin-table-scroll">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>{{ 'ADMIN.ORDER_ID' | translate }}</th>
+                  <th>{{ 'ADMIN.CUSTOMER' | translate }}</th>
+                  <th>{{ 'ADMIN.TOTAL' | translate }}</th>
+                  <th>{{ 'ADMIN.STATUS' | translate }}</th>
+                  <th>{{ 'ADMIN.DATE' | translate }}</th>
+                  <th>{{ 'ADMIN.ACTIONS' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let order of orders()">
+                  <td><span class="order-id">#{{ order.id }}</span></td>
+                  <td>{{ order.user?.email }}</td>
+                  <td><span class="amount-cell">${{ order.totalAmount }}</span></td>
+                  <td>
+                    <select
+                      [(ngModel)]="order.status"
+                      (ngModelChange)="updateOrderStatus(order.id, $event)"
+                      class="status-select"
+                      [ngClass]="getStatusBadgeClass(order.status)">
+                      <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+                    </select>
+                  </td>
+                  <td class="date-cell">{{ formatDate(order.createdAt) }}</td>
+                  <td>
+                    <button class="action-btn action-btn--view" (click)="viewOrder(order)">
+                      {{ 'ADMIN.VIEW' | translate }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ═══════════ PRODUCTS TAB ═══════════ -->
+        <div *ngIf="activeTab() === 'products'" class="admin-table-panel animate-fade-in">
+          <div class="admin-table-panel__header">
+            <h3>{{ 'ADMIN.PRODUCTS' | translate }}</h3>
+            <button class="btn btn-primary btn-sm" (click)="openAddProduct()">
+              {{ 'ADMIN.ADD_PRODUCT' | translate }}
+            </button>
+          </div>
+          <div *ngIf="productsLoading()" class="loading-spinner">{{ 'ADMIN.LOADING_PRODUCTS' | translate }}</div>
+          <div *ngIf="!productsLoading() && products().length === 0" class="empty-state">{{ 'ADMIN.NO_PRODUCTS' | translate }}</div>
+          <div *ngIf="!productsLoading() && products().length > 0" class="admin-table-scroll">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>{{ 'ADMIN.IMAGE' | translate }}</th>
+                  <th>{{ 'ADMIN.NAME' | translate }}</th>
+                  <th>{{ 'ADMIN.CATEGORY' | translate }}</th>
+                  <th>{{ 'ADMIN.PRICE' | translate }}</th>
+                  <th>{{ 'ADMIN.AVAILABLE' | translate }}</th>
+                  <th>{{ 'ADMIN.ACTIONS' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let product of products()">
+                  <td>
+                    <img [src]="product.imageUrl" [alt]="product.nameEn" class="product-thumb"
+                      onerror="this.src='https://placehold.co/48x48/f97316/white?text=?'"/>
+                  </td>
+                  <td>
+                    <div class="product-name-cell">
+                      <span class="product-name-en">{{ product.nameEn }} -</span>
+                      <span class="product-name-ar"> {{ product.nameAr }}</span>
+                    </div>
+                  </td>
+                  <td><span class="category-badge">{{ product.category }}</span></td>
+                  <td><span class="amount-cell">${{ product.price }}</span></td>
+                  <td>
+                    <button class="availability-toggle"
+                      [class.available]="product.isAvailable"
+                      [class.unavailable]="!product.isAvailable"
+                      (click)="toggleAvailability(product)">
+                      {{ product.isAvailable ? ('ADMIN.AVAILABLE_YES' | translate) : ('ADMIN.AVAILABLE_NO' | translate) }}
+                    </button>
+                  </td>
+                  <td>
+                    <div class="action-btns">
+                      <button class="action-btn action-btn--view" (click)="openEditProduct(product)">
+                        {{ 'ADMIN.EDIT' | translate }}
+                      </button>
+                      <button class="action-btn action-btn--delete" (click)="deleteProduct(product.id)">
+                        {{ 'ADMIN.DELETE' | translate }}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ═══════════ USERS TAB ═══════════ -->
+        <div *ngIf="activeTab() === 'users'" class="admin-table-panel animate-fade-in">
+          <div class="admin-table-panel__header">
+            <h3>{{ 'ADMIN.USERS' | translate }}</h3>
+            <button class="btn btn-ghost btn-sm" (click)="loadUsers()">↻ {{ 'ADMIN.REFRESH' | translate }}</button>
+          </div>
+          <div *ngIf="usersLoading()" class="loading-spinner">{{ 'ADMIN.LOADING_USERS' | translate }}</div>
+          <div *ngIf="!usersLoading() && users().length === 0" class="empty-state">{{ 'ADMIN.NO_USERS' | translate }}</div>
+          <div *ngIf="!usersLoading() && users().length > 0" class="admin-table-scroll">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>{{ 'AUTH.EMAIL' | translate }}</th>
+                  <th>{{ 'ADMIN.ROLE' | translate }}</th>
+                  <th>{{ 'ADMIN.JOINED' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of users()">
+                  <td><span class="order-id">#{{ user.id }}</span></td>
+                  <td>{{ user.email }}</td>
+                  <td>
+                    <span class="role-badge" [class.role-badge--admin]="user.role === 'ADMIN'">
+                      {{ user.role }}
+                    </span>
+                  </td>
+                  <td class="date-cell">{{ user.createdAt ? formatDate(user.createdAt) : '—' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ ORDER DETAIL MODAL ═══════════ -->
+<div *ngIf="selectedOrder()" class="modal-overlay" (click)="closeOrderModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ 'ADMIN.ORDER_DETAIL' | translate }} #{{ selectedOrder()!.id }}</h3>
+      <button class="modal-close" (click)="closeOrderModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-meta-grid">
+        <div class="modal-meta-item">
+          <span class="modal-meta-label">{{ 'ADMIN.CUSTOMER' | translate }}</span>
+          <span class="modal-meta-value">{{ selectedOrder()!.user?.email }}</span>
+        </div>
+        <div class="modal-meta-item">
+          <span class="modal-meta-label">{{ 'ADMIN.STATUS' | translate }}</span>
+          <span class="modal-meta-value" [ngClass]="getStatusBadgeClass(selectedOrder()!.status)">
+            {{ selectedOrder()!.status }}
+          </span>
+        </div>
+        <div class="modal-meta-item">
+          <span class="modal-meta-label">{{ 'ADMIN.TOTAL' | translate }}</span>
+          <span class="modal-meta-value">${{ selectedOrder()!.totalAmount }}</span>
+        </div>
+        <div class="modal-meta-item">
+          <span class="modal-meta-label">{{ 'ADMIN.PAYMENT' | translate }}</span>
+          <span class="modal-meta-value">{{ selectedOrder()!.paymentMethod }}</span>
+        </div>
+        <div class="modal-meta-item">
+          <span class="modal-meta-label">{{ 'ADMIN.DATE' | translate }}</span>
+          <span class="modal-meta-value">{{ formatDate(selectedOrder()!.createdAt) }}</span>
+        </div>
+      </div>
+
+      <h4 class="modal-section-title">{{ 'ADMIN.ITEMS' | translate }}</h4>
+      <div class="order-items-list">
+        <div *ngFor="let item of $any(selectedOrder())!.enrichedItems" class="order-item-row">
+          <img *ngIf="item.product"
+            [src]="item.product.imageUrl" [alt]="item.product.nameEn"
+            class="order-item-img"
+            onerror="this.src='https://placehold.co/56x56/f97316/white?text=?'"/>
+          <div *ngIf="!item.product" class="order-item-img order-item-img--placeholder">?</div>
+          <div class="order-item-info">
+            <span class="order-item-name">{{ item.product?.nameEn || 'Product #' + item.productId }}</span>
+            <span class="order-item-desc" *ngIf="item.product">{{ item.product.descriptionEn }}</span>
+          </div>
+          <div class="order-item-qty">× {{ item.quantity }}</div>
+          <div class="order-item-price">${{ item.price }}</div>
+        </div>
+        <div *ngIf="!$any(selectedOrder())!.enrichedItems" class="loading-spinner">
+          {{ 'ADMIN.LOADING_ITEMS' | translate }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ ADD / EDIT PRODUCT MODAL ═══════════ -->
+<div *ngIf="showProductModal()" class="modal-overlay" (click)="closeProductModal()">
+  <div class="modal-card modal-card--wide" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ (editingProduct() ? 'ADMIN.EDIT_PRODUCT' : 'ADMIN.ADD_PRODUCT_MODAL') | translate }}</h3>
+      <button class="modal-close" (click)="closeProductModal()">✕</button>
+    </div>
+    <div class="modal-body" [formGroup]="productForm">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">{{ 'ADMIN.NAME_EN' | translate }} *</label>
+          <input class="form-input" formControlName="nameEn" placeholder="e.g. Classic Burger"/>
+          <span *ngIf="productForm.get('nameEn')?.invalid && productForm.get('nameEn')?.touched"
+            class="form-error">{{ 'ADMIN.REQUIRED' | translate }}</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">{{ 'ADMIN.NAME_AR' | translate }} *</label>
+          <input class="form-input" formControlName="nameAr" placeholder="e.g. برجر كلاسيك" dir="rtl"/>
+          <span *ngIf="productForm.get('nameAr')?.invalid && productForm.get('nameAr')?.touched"
+            class="form-error">{{ 'ADMIN.REQUIRED' | translate }}</span>
+        </div>
+        <div class="form-group form-group--full">
+          <label class="form-label">{{ 'ADMIN.DESC_EN' | translate }} *</label>
+          <textarea class="form-input form-textarea" formControlName="descriptionEn"
+            placeholder="Describe the product..."></textarea>
+          <span *ngIf="productForm.get('descriptionEn')?.invalid && productForm.get('descriptionEn')?.touched"
+            class="form-error">{{ 'ADMIN.REQUIRED' | translate }}</span>
+        </div>
+        <div class="form-group form-group--full">
+          <label class="form-label">{{ 'ADMIN.DESC_AR' | translate }}</label>
+          <textarea class="form-input form-textarea" formControlName="descriptionAr"
+            dir="rtl" placeholder="وصف المنتج..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">{{ 'ADMIN.PRICE' | translate }} ($) *</label>
+          <input class="form-input" formControlName="price" type="number" min="0" step="0.01" placeholder="9.99"/>
+          <span *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched"
+            class="form-error">{{ 'ADMIN.PRICE_REQUIRED' | translate }}</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">{{ 'ADMIN.CATEGORY' | translate }} *</label>
+          <select class="form-input" formControlName="category">
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+        <div class="form-group form-group--full">
+          <label class="form-label">{{ 'ADMIN.IMAGE_URL' | translate }} *</label>
+          <input class="form-input" formControlName="imageUrl" placeholder="https://..."/>
+          <span *ngIf="productForm.get('imageUrl')?.invalid && productForm.get('imageUrl')?.touched"
+            class="form-error">{{ 'ADMIN.REQUIRED' | translate }}</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">{{ 'ADMIN.AVAILABLE' | translate }}</label>
+          <label class="toggle-switch">
+            <input type="checkbox" formControlName="isAvailable"/>
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">
+              {{ productForm.get('isAvailable')?.value ? ('ADMIN.AVAILABLE_YES' | translate) : ('ADMIN.AVAILABLE_NO' | translate) }}
+            </span>
+          </label>
+        </div>
+        <div class="form-group" *ngIf="productForm.get('imageUrl')?.value">
+          <label class="form-label">{{ 'ADMIN.PREVIEW' | translate }}</label>
+          <img [src]="productForm.get('imageUrl')?.value" class="image-preview"
+            onerror="this.style.display='none'"/>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-ghost" (click)="closeProductModal()">{{ 'ADMIN.CANCEL' | translate }}</button>
+        <button class="btn btn-primary" (click)="saveProduct()" [disabled]="productSaving()">
+          {{ productSaving() ? ('ADMIN.SAVING' | translate) : (editingProduct() ? ('ADMIN.SAVE_CHANGES' | translate) : ('ADMIN.ADD_PRODUCT_MODAL' | translate)) }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+  <footer class="footer" *ngIf="authService.isAuthenticated()">
+    <div class="container">
+      <div class="footer__grid">
+        <!-- Brand -->
+        <div class="footer__brand">
+          <a routerLink="/" class="header__logo">
+            <div class="header__logo-icon">GB</div>
+            <span class="header__logo-text">{{ 'APP.TITLE' | translate }}</span>
+          </a>
+          <p>{{ 'APP.SUBTITLE' | translate }}</p>
+        </div>
+        <!-- Pages -->
+        <div class="footer__col">
+          <h4>Pages</h4>
+          <ul>
+            <li>
+              <a *ngIf="!authService.isAdmin()" routerLink="/">{{ 'HEADER.MENU' | translate }}</a>
+            </li>
+            <li>
+              <a *ngIf="!authService.isAdmin()" routerLink="/cart">{{
+                'HEADER.CART' | translate
+              }}</a>
+            </li>
+            <li><a *ngIf="!authService.isAdmin()" routerLink="/track">Track Order</a></li>
+            <li>
+              <a *ngIf="authService.isAdmin()" routerLink="/admin">{{
+                'HEADER.ADMIN' | translate
+              }}</a>
+            </li>
+          </ul>
+        </div>
+        <!-- Contact -->
+        <div class="footer__col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="#">hello&#64;gourmetbites.com</a></li>
+            <li><a href="#">+1 800 GOURMET</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p>&copy; 2026 {{ 'APP.TITLE' | translate }}. All rights reserved.</p>
+        <p style="color: #d97706; font-weight: 600">Made with ❤️ &amp; 🍊</p>
+      </div>
+    </div>
+  </footer>

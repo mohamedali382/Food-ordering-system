@@ -1,0 +1,23 @@
+# Both projects
+node_modules/
+dist/
+*.log
+
+# Environment
+.env
+.env.*
+
+# Database
+*.sqlite
+*.db
+
+# Angular
+.angular/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

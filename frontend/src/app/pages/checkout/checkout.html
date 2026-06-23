@@ -1,0 +1,241 @@
+<div class="checkout-page">
+  <div class="container">
+
+    <div class="section-heading">
+      <h2>{{ 'CHECKOUT.TITLE' | translate }}</h2>
+      <div class="divider"></div>
+    </div>
+
+    <!-- Steps Bar -->
+    <div class="checkout-steps">
+      <div class="step active">
+        <div class="step__bubble">1</div>
+        <span class="step__label">{{ 'CHECKOUT.STEP_DETAILS' | translate }}</span>
+      </div>
+      <div class="step__line"></div>
+      <div class="step">
+        <div class="step__bubble">2</div>
+        <span class="step__label">{{ 'CHECKOUT.STEP_PAYMENT' | translate }}</span>
+      </div>
+      <div class="step__line"></div>
+      <div class="step">
+        <div class="step__bubble">3</div>
+        <span class="step__label">{{ 'CHECKOUT.STEP_CONFIRM' | translate }}</span>
+      </div>
+    </div>
+
+    <div class="checkout-layout">
+
+      <!-- ── Form Panel ───────────────────────────────────── -->
+      <div class="checkout-panel animate-fade-up">
+
+        <!-- Delivery Details -->
+        <div class="checkout-panel__section">
+          <h3>{{ 'CHECKOUT.DELIVERY_DETAILS' | translate }}</h3>
+          <div class="form-grid">
+
+            <!-- First Name -->
+            <div>
+              <label class="form-label">{{ 'CHECKOUT.FIRST_NAME' | translate }}</label>
+              <input type="text" class="form-input" [class.input-error]="hasError('firstName')"
+                placeholder="Ahmed"
+                [value]="firstName()"
+                (input)="firstName.set($any($event).target.value); clearError('firstName')">
+              <span class="field-error" *ngIf="hasError('firstName')">{{ getError('firstName') }}</span>
+            </div>
+
+            <!-- Last Name -->
+            <div>
+              <label class="form-label">{{ 'CHECKOUT.LAST_NAME' | translate }}</label>
+              <input type="text" class="form-input" [class.input-error]="hasError('lastName')"
+                placeholder="Hassan"
+                [value]="lastName()"
+                (input)="lastName.set($any($event).target.value); clearError('lastName')">
+              <span class="field-error" *ngIf="hasError('lastName')">{{ getError('lastName') }}</span>
+            </div>
+
+            <!-- Phone -->
+            <div>
+              <label class="form-label">{{ 'CHECKOUT.PHONE' | translate }}</label>
+              <input type="tel" class="form-input" [class.input-error]="hasError('phone')"
+                placeholder="01012345678"
+                maxlength="11"
+                [value]="phone()"
+                (input)="phone.set($any($event).target.value); clearError('phone')">
+              <span class="field-error" *ngIf="hasError('phone')">{{ getError('phone') }}</span>
+            </div>
+
+            <!-- Email (locked) -->
+            <div>
+              <label class="form-label">{{ 'CHECKOUT.EMAIL' | translate }}</label>
+              <input type="email" class="form-input"
+                [value]="email()" readonly
+                style="background: #f3f4f6; cursor: not-allowed;">
+            </div>
+
+            <!-- Address -->
+            <div class="full">
+              <label class="form-label">{{ 'CHECKOUT.ADDRESS' | translate }}</label>
+              <input type="text" class="form-input" [class.input-error]="hasError('address')"
+                placeholder="12 Tahrir Square, Apt 4, Downtown"
+                [value]="address()"
+                (input)="address.set($any($event).target.value); clearError('address')">
+              <span class="field-error" *ngIf="hasError('address')">{{ getError('address') }}</span>
+            </div>
+
+            <!-- City -->
+            <div>
+              <label class="form-label">{{ 'CHECKOUT.CITY' | translate }}</label>
+              <select class="form-input" [class.input-error]="hasError('city')"
+                [value]="city()"
+                (change)="city.set($any($event).target.value); clearError('city')">
+                <option value="" disabled selected>{{ 'CHECKOUT.CITY_PLACEHOLDER' | translate }}</option>
+                <option *ngFor="let c of egyptianCities" [value]="c">{{ c }}</option>
+              </select>
+              <span class="field-error" *ngIf="hasError('city')">{{ getError('city') }}</span>
+            </div>
+
+            <!-- Zip Code -->
+            <div>
+              <label class="form-label">{{ 'CHECKOUT.ZIP' | translate }}</label>
+              <input type="text" class="form-input" [class.input-error]="hasError('zipCode')"
+                placeholder="11511"
+                maxlength="5"
+                [value]="zipCode()"
+                (input)="zipCode.set($any($event).target.value); clearError('zipCode')">
+              <span class="field-error" *ngIf="hasError('zipCode')">{{ getError('zipCode') }}</span>
+            </div>
+
+            <!-- Notes -->
+            <div class="full">
+              <label class="form-label">{{ 'CHECKOUT.NOTES' | translate }}</label>
+              <textarea class="form-input" rows="2"
+                [placeholder]="'CHECKOUT.NOTES_PLACEHOLDER' | translate"
+                [value]="notes()"
+                (input)="notes.set($any($event).target.value)"></textarea>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="checkout-panel__section">
+          <h3>{{ 'CHECKOUT.PAYMENT_METHOD' | translate }}</h3>
+          <div class="payment-options">
+
+            <label class="payment-option">
+              <input type="radio" name="payment" value="ONLINE"
+                [checked]="paymentMethod() === 'ONLINE'" (change)="setPayment('ONLINE')">
+              <div class="payment-option__card">
+                <div class="payment-option__icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                  </svg>
+                </div>
+                <span class="payment-option__label">{{ 'CHECKOUT.PAY_ONLINE' | translate }}</span>
+              </div>
+            </label>
+
+            <label class="payment-option">
+              <input type="radio" name="payment" value="COD"
+                [checked]="paymentMethod() === 'COD'" (change)="setPayment('COD')">
+              <div class="payment-option__card">
+                <div class="payment-option__icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                </div>
+                <span class="payment-option__label">{{ 'CHECKOUT.CASH_ON_DELIVERY' | translate }}</span>
+              </div>
+            </label>
+
+          </div>
+
+          <!-- Card Fields -->
+          <div class="card-fields" *ngIf="paymentMethod() === 'ONLINE'">
+            <div>
+              <label class="form-label">{{ 'CHECKOUT.CARD_NUMBER' | translate }}</label>
+              <input type="text" class="form-input" [class.input-error]="hasError('cardNumber')"
+                placeholder="1234 5678 9012 3456"
+                maxlength="19"
+                [value]="cardNumber()"
+                (input)="cardNumber.set($any($event).target.value); clearError('cardNumber')">
+              <span class="field-error" *ngIf="hasError('cardNumber')">{{ getError('cardNumber') }}</span>
+            </div>
+            <div class="form-grid">
+              <div>
+                <label class="form-label">{{ 'CHECKOUT.EXPIRY' | translate }}</label>
+                <input type="text" class="form-input" [class.input-error]="hasError('cardExpiry')"
+                  placeholder="MM/YY"
+                  maxlength="5"
+                  [value]="cardExpiry()"
+                  (input)="cardExpiry.set($any($event).target.value); clearError('cardExpiry')">
+                <span class="field-error" *ngIf="hasError('cardExpiry')">{{ getError('cardExpiry') }}</span>
+              </div>
+              <div>
+                <label class="form-label">{{ 'CHECKOUT.CVV' | translate }}</label>
+                <input type="text" class="form-input" [class.input-error]="hasError('cardCvv')"
+                  placeholder="•••"
+                  maxlength="4"
+                  [value]="cardCvv()"
+                  (input)="cardCvv.set($any($event).target.value); clearError('cardCvv')">
+                <span class="field-error" *ngIf="hasError('cardCvv')">{{ getError('cardCvv') }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="checkout-panel__section">
+          <button (click)="placeOrder()" class="btn btn-primary btn-full btn-lg"
+            [disabled]="isPlacingOrder()">
+            {{ isPlacingOrder()
+              ? ('CHECKOUT.PLACING_ORDER' | translate)
+              : ('CHECKOUT.PLACE_ORDER' | translate) + ' — $' + (cartService.total() | number:'1.2-2') }}
+          </button>
+          <div *ngIf="errorMessage()" class="error-banner" style="margin-top: 0.75rem;">
+            {{ errorMessage() }}
+          </div>
+          <a routerLink="/cart" class="btn btn-ghost btn-full" style="margin-top:0.75rem">
+            {{ 'CHECKOUT.BACK_TO_CART' | translate }}
+          </a>
+        </div>
+
+      </div><!-- /checkout-panel -->
+
+      <!-- ── Order Summary Sidebar ─────────────────────────── -->
+      <div class="checkout-summary animate-fade-up" style="animation-delay:0.1s">
+        <h3>{{ 'CHECKOUT.ORDER_SUMMARY' | translate }}</h3>
+
+        <div class="summary-item" *ngFor="let item of cartService.items()">
+          <div class="summary-item__img">
+            <img [src]="item.imageUrl" [alt]="item.nameEn">
+          </div>
+          <div>
+            <div class="summary-item__name">{{ item.nameEn }}</div>
+            <div class="summary-item__qty">× {{ item.quantity }}</div>
+          </div>
+          <div class="summary-item__price">${{ (item.price * item.quantity) | number:'1.2-2' }}</div>
+        </div>
+
+        <hr class="checkout-divider">
+        <div class="summary-row">
+          <span>{{ 'CHECKOUT.SUBTOTAL' | translate }}</span>
+          <span>${{ cartService.subtotal() | number:'1.2-2' }}</span>
+        </div>
+        <div class="summary-row">
+          <span>{{ 'CHECKOUT.DELIVERY' | translate }}</span>
+          <span>${{ cartService.delivery() | number:'1.2-2' }}</span>
+        </div>
+        <hr class="checkout-divider">
+        <div class="checkout-total">
+          <span>{{ 'CHECKOUT.TOTAL' | translate }}</span>
+          <span>${{ cartService.total() | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+    </div><!-- /checkout-layout -->
+  </div>
+</div>

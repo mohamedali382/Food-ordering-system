@@ -1,0 +1,276 @@
+.order-success-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  color: #166534;
+}
+
+.order-success-banner svg {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  color: #16a34a;
+  margin-top: 2px;
+}
+
+.order-success-banner strong {
+  display: block;
+  font-size: 1.05rem;
+  margin-bottom: 0.2rem;
+}
+
+.order-success-banner p {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.85;
+}
+
+.order-success-banner__content { flex: 1; }
+
+.order-success-banner__close {
+  background: none;
+  border: none;
+  color: #166534;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 0;
+  flex-shrink: 0;
+  align-self: flex-start;
+  line-height: 1;
+  transition: opacity 0.2s;
+}
+
+.order-success-banner__close:hover { opacity: 1; }
+
+.tracking-page { padding: 4rem 0 6rem; }
+
+.tracking-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2.5rem;
+  align-items: start;
+  margin-bottom: 3rem;
+}
+
+/* Info Card */
+.tracking-info {
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--orange-100);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.tracking-info__header {
+  background: linear-gradient(135deg, var(--orange-500), var(--orange-700));
+  padding: 2rem;
+  color: white;
+  text-align: center;
+}
+.tracking-info__header .order-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+}
+.tracking-info__header h3 {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+.tracking-info__header .eta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+  padding: 0.375rem 1rem;
+  border-radius: 99px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.tracking-info__body { padding: 1.75rem; }
+.tracking-detail-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--orange-50);
+}
+.tracking-detail-row:last-child { border-bottom: none; }
+.tracking-detail-row__icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-sm);
+  background: var(--orange-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--orange-500);
+  flex-shrink: 0;
+}
+.tracking-detail-row__icon svg { width: 1.125rem; height: 1.125rem; }
+.tracking-detail-row__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #b45309;
+  margin-bottom: 0.25rem;
+}
+.tracking-detail-row__value { font-size: 0.9375rem; font-weight: 700; color: #431407; }
+
+/* Progress Timeline */
+.tracking-progress {
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--orange-100);
+  box-shadow: var(--shadow-sm);
+  padding: 2.5rem;
+}
+.tracking-progress h3 {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: #431407;
+  letter-spacing: -0.02em;
+  margin-bottom: 2.5rem;
+}
+
+.timeline { display: flex; flex-direction: column; gap: 0; }
+
+.timeline-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  position: relative;
+}
+.timeline-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 1.375rem;
+  top: 3rem;
+  width: 2px;
+  height: calc(100% - 1rem);
+  background: var(--orange-100);
+  border-radius: 99px;
+  z-index: 0;
+}
+.timeline-step.done:not(:last-child)::after { background: var(--orange-400); }
+
+.timeline-step__col { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+
+.timeline-bubble {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: 3px solid var(--orange-100);
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--orange-200);
+  flex-shrink: 0;
+  transition: all var(--transition);
+}
+.timeline-bubble svg { width: 1.25rem; height: 1.25rem; }
+
+.timeline-step.done .timeline-bubble {
+  border-color: var(--orange-400);
+  background: var(--orange-50);
+  color: var(--orange-500);
+}
+.timeline-step.active .timeline-bubble {
+  border-color: var(--orange-500);
+  background: var(--orange-500);
+  color: white;
+  box-shadow: 0 0 0 8px rgb(249 115 22 / 0.15);
+}
+
+.timeline-step__content {
+  flex: 1;
+  padding-bottom: 2.5rem;
+}
+.timeline-step:last-child .timeline-step__content { padding-bottom: 0; }
+.timeline-step__title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #431407;
+  margin-bottom: 0.25rem;
+  margin-top: 0.5rem;
+}
+.timeline-step.active .timeline-step__title { color: var(--orange-500); }
+.timeline-step.upcoming .timeline-step__title { color: #d97706; opacity: 0.6; }
+.timeline-step__desc { font-size: 0.8125rem; color: #92400e; line-height: 1.5; }
+.timeline-step__time { font-size: 0.75rem; color: #b45309; font-weight: 600; margin-top: 0.5rem; }
+
+/* Pulse on active */
+.timeline-step.active .timeline-bubble { animation: pulse-ring 1.8s ease infinite; }
+
+/* Live indicator */
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #16a34a;
+  background: #dcfce7;
+  padding: 0.25rem 0.625rem;
+  border-radius: 99px;
+  margin-bottom: 1.5rem;
+}
+.live-dot {
+  width: 6px;
+  height: 6px;
+  background: #16a34a;
+  border-radius: 50%;
+  animation: pulse-ring 1.5s infinite;
+}
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .tracking-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .order-success-banner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.25rem 1rem;
+    gap: 0.75rem;
+    border-radius: 0.75rem;
+  }
+
+  .order-success-banner svg {
+    width: 36px;
+    height: 36px;
+    margin-top: 0;
+  }
+
+  .order-success-banner strong {
+    font-size: 1rem;
+  }
+
+  .order-success-banner p {
+    font-size: 0.85rem;
+  }
+    .order-success-banner__close {
+    align-self: center;
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+  }
+
+  .order-success-banner { position: relative; }
+}

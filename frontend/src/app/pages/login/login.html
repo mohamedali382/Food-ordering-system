@@ -1,0 +1,67 @@
+<div class="login-page">
+  <div class="login-card animate-fade-up">
+
+    <!-- Logo -->
+    <div class="login-logo">
+      <div class="login-logo__icon">GB</div>
+      <span class="login-logo__text">{{ 'APP.TITLE' | translate }}</span>
+    </div>
+
+    <!-- Title -->
+    <div class="login-heading">
+      <h1>{{ (isSignUp() ? 'AUTH.CREATE_ACCOUNT' : 'AUTH.LOGIN') | translate }}</h1>
+      <p>{{ 'APP.SUBTITLE' | translate }}</p>
+    </div>
+
+    <!-- Error / Success Message -->
+    <div *ngIf="errorMessage()" class="login-message"
+      [class.login-message--error]="!errorMessage().includes('successful')"
+      [class.login-message--success]="errorMessage().includes('successful')">
+      {{ errorMessage() }}
+    </div>
+
+    <!-- Form -->
+    <div class="login-form">
+
+      <div class="form-group">
+        <label class="form-label">{{ 'AUTH.EMAIL' | translate }}</label>
+        <input
+          type="email"
+          class="form-input"
+          [placeholder]="'AUTH.EMAIL_PLACEHOLDER' | translate"
+          [value]="email()"
+          (input)="email.set($any($event).target.value)">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">{{ 'AUTH.PASSWORD' | translate }}</label>
+        <input
+          type="password"
+          class="form-input"
+          [placeholder]="'AUTH.PASSWORD_PLACEHOLDER' | translate"
+          [value]="password()"
+          (input)="password.set($any($event).target.value)">
+      </div>
+
+      <button
+        class="btn btn-primary btn-full btn-lg"
+        (click)="onSubmit()"
+        [disabled]="isLoading()">
+        {{ isLoading()
+          ? ('AUTH.LOADING' | translate)
+          : (isSignUp() ? ('AUTH.SIGN_UP' | translate) : ('AUTH.SIGN_IN' | translate)) }}
+      </button>
+    </div>
+
+    <!-- Toggle -->
+    <div class="login-toggle">
+      <p>
+        {{ (isSignUp() ? 'AUTH.ALREADY_HAVE_ACCOUNT' : 'AUTH.DONT_HAVE_ACCOUNT') | translate }}
+        <button class="login-toggle__btn" (click)="toggleSignUp()">
+          {{ (isSignUp() ? 'AUTH.LOGIN' : 'AUTH.SIGN_UP') | translate }}
+        </button>
+      </p>
+    </div>
+
+  </div>
+</div>

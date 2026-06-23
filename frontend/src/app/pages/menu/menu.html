@@ -1,0 +1,94 @@
+<!-- Toast Notification -->
+<div class="cart-toast" [class.visible]="cartService.toast()">
+  {{ cartService.toast() }}
+</div>
+
+<!-- ── Hero ───────────────────────────────────────────────── -->
+<section class="menu-hero">
+  <div class="container">
+    <div class="menu-hero__inner">
+      <!-- Content -->
+      <div class="menu-hero__content">
+        <div class="menu-hero__eyebrow">{{ 'HERO.EYEBROW' | translate }}</div>
+        <h1 class="menu-hero__title">
+          {{ 'HERO.TITLE_1' | translate }}<br>
+          <span>{{ 'HERO.TITLE_2' | translate }}</span>
+        </h1>
+        <p class="menu-hero__desc">{{ 'APP.SUBTITLE' | translate }}</p>
+        <div class="menu-hero__cta">
+          <a href="#menu-section" class="btn btn-primary btn-lg">{{ 'APP.ORDER_NOW' | translate }}</a>
+          <a href="#" class="btn btn-outline btn-lg">{{ 'HERO.LEARN_MORE' | translate }}</a>
+        </div>
+        <!-- Stats -->
+        <div class="menu-hero__stats">
+          <div class="stat-item">
+            <span class="stat-value">50+</span>
+            <span class="stat-label">{{ 'HERO.STATS_ITEMS' | translate }}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">4.9★</span>
+            <span class="stat-label">{{ 'HERO.STATS_RATING' | translate }}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">30 min</span>
+            <span class="stat-label">{{ 'HERO.STATS_DELIVERY' | translate }}</span>
+          </div>
+        </div>
+      </div>
+      <!-- Hero Image -->
+      <div class="menu-hero__image">
+        <img src="/assets/burger.png" alt="Featured Dish">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Menu Section ───────────────────────────────────────── -->
+<section id="menu-section" class="menu-section">
+  <div class="container">
+    <div class="section-heading">
+      <h2>{{ 'HEADER.MENU' | translate }}</h2>
+      <div class="divider"></div>
+      <p>{{ 'MENU.SECTION_SUBTITLE' | translate }}</p>
+    </div>
+
+    <!-- Category Filter -->
+<div class="category-filter">
+  <button
+    *ngFor="let cat of categories"
+    class="category-btn"
+    [class.active]="activeCategory() === cat"
+    (click)="activeCategory.set(cat)">
+    {{ getCategoryLabel(cat) }}
+  </button>
+</div>
+
+    <!-- Products Grid -->
+    <div class="grid-products stagger">
+      <div *ngFor="let product of getFilteredProducts()" class="product-card animate-fade-up">
+        <!-- Image -->
+        <div class="product-card__image-wrap">
+          <img [src]="product.imageUrl" [alt]="product.nameEn" class="product-card__image">
+        </div>
+        <!-- Body -->
+        <div class="product-card__body">
+          <h3 class="product-card__name">{{ getProductName(product) }}</h3>
+          <p class="product-card__desc">{{ getProductDesc(product) }}</p>
+          <div class="product-card__footer">
+            <div class="product-card__price">
+              ${{ product.price }}
+              <span>{{ 'PRODUCTS.PER_ITEM' | translate }}</span>
+            </div>
+            <button class="add-btn" (click)="addToCart(product)"
+              [title]="'PRODUCTS.ADD_TO_CART' | translate">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,77 @@
+<header class="header">
+  <div class="container">
+    <div class="header__inner">
+
+      <!-- Logo -->
+      <a routerLink="/" class="header__logo">
+        <div class="header__logo-icon">GB</div>
+        <span class="header__logo-text">{{ 'APP.TITLE' | translate }}</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="header__nav">
+        <ng-container *ngIf="authService.isAuthenticated(); else guestNav">
+          <ng-container *ngIf="!authService.isAdmin()">
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ 'HEADER.MENU' | translate }}</a>
+            <a routerLink="/cart" routerLinkActive="active">{{ 'HEADER.CART' | translate }}</a>
+            <a routerLink="/track" routerLinkActive="active">{{ 'HEADER.TRACK_ORDER' | translate }}</a>
+          </ng-container>
+          <ng-container *ngIf="authService.isAdmin()">
+            <a routerLink="/admin" routerLinkActive="active">{{ 'HEADER.ADMIN' | translate }}</a>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #guestNav>
+        </ng-template>
+      </nav>
+
+      <!-- Actions -->
+      <div class="header__actions">
+
+        <!-- Cart (logged-in users only) -->
+        <a *ngIf="authService.isAuthenticated() && !authService.isAdmin()"
+           routerLink="/cart" class="header__cart-btn" title="Cart">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          <span class="cart-badge">{{ cartCount() }}</span>
+        </a>
+
+        <!-- User info + logout (authenticated) -->
+        <div class="user-info" *ngIf="authService.isAuthenticated(); else authButtons">
+          <span class="user-email">{{ authService.currentUser()?.email }}</span>
+          <span class="user-role" [ngClass]="{ 'role-admin': authService.isAdmin() }">
+            {{ authService.isAdmin() ? 'Admin' : 'User' }}
+          </span>
+          <button class="btn-logout" (click)="logout()" title="Logout">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Login / Register buttons (guest) -->
+        <ng-template #authButtons>
+          <a routerLink="/login" class="btn btn-outline btn-sm">{{ 'HEADER.LOGIN' | translate }}</a>
+        </ng-template>
+
+        <!-- Language Selector -->
+        <select class="lang-select" (change)="onLangChange($event)">
+          <option value="en">EN</option>
+          <option value="ar">عربية</option>
+        </select>
+
+        <!-- Mobile toggle -->
+        <button class="menu-toggle" [ngClass]="{ open: mobileMenuOpen() }"
+          (click)="toggleMobileMenu()" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+</header>

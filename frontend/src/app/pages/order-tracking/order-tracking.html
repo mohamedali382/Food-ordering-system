@@ -1,0 +1,137 @@
+<div class="tracking-page">
+  <div class="container">
+
+    <!-- Success Banner -->
+    <div class="order-success-banner" *ngIf="orderPlacedSuccess()">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+      </svg>
+      <div class="order-success-banner__content">
+        <strong>{{ 'TRACKING.SUCCESS_TITLE' | translate }}</strong>
+        <p>{{ 'TRACKING.SUCCESS_DESC' | translate }}</p>
+      </div>
+      <button class="order-success-banner__close" (click)="orderPlacedSuccess.set(false)">✕</button>
+    </div>
+
+    <div class="section-heading">
+      <h2>{{ 'TRACKING.TITLE' | translate }}</h2>
+      <div class="divider"></div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading()" class="loading-spinner">
+      {{ 'TRACKING.LOADING' | translate }}
+    </div>
+
+    <!-- No orders -->
+    <div *ngIf="!isLoading() && orders().length === 0" class="cart-empty animate-fade-up">
+      <span class="cart-empty__icon">📦</span>
+      <h3>{{ 'TRACKING.NO_ORDERS_TITLE' | translate }}</h3>
+      <p>{{ 'TRACKING.NO_ORDERS_DESC' | translate }}</p>
+      <a routerLink="/" class="btn btn-primary">{{ 'TRACKING.BROWSE_MENU' | translate }}</a>
+    </div>
+
+    <!-- Orders Loop -->
+    <div *ngFor="let order of orders()" class="tracking-layout animate-fade-up">
+
+      <!-- Info Card -->
+      <div class="tracking-info">
+        <div class="tracking-info__header">
+          <div class="order-num">{{ 'TRACKING.ORDER_NUMBER' | translate }}</div>
+          <h3>#{{ order.id }}</h3>
+          <span class="eta">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            {{ 'TRACKING.ETA' | translate }}
+          </span>
+        </div>
+
+        <div class="tracking-info__body">
+
+          <!-- Status -->
+          <div class="tracking-detail-row">
+            <div class="tracking-detail-row__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tracking-detail-row__label">{{ 'TRACKING.STATUS' | translate }}</div>
+              <div class="tracking-detail-row__value">{{ order.status }}</div>
+            </div>
+          </div>
+
+          <!-- Total -->
+          <div class="tracking-detail-row">
+            <div class="tracking-detail-row__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tracking-detail-row__label">{{ 'TRACKING.TOTAL' | translate }}</div>
+              <div class="tracking-detail-row__value">${{ order.totalAmount }}</div>
+            </div>
+          </div>
+
+          <!-- Placed At -->
+          <div class="tracking-detail-row">
+            <div class="tracking-detail-row__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tracking-detail-row__label">{{ 'TRACKING.PLACED_AT' | translate }}</div>
+              <div class="tracking-detail-row__value">{{ formatDate(order.createdAt) }}</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Timeline Progress -->
+      <div class="tracking-progress">
+        <div class="live-badge">
+          <span class="live-dot"></span>
+          {{ 'TRACKING.LIVE_TRACKING' | translate }}
+        </div>
+        <h3>{{ 'TRACKING.ORDER_PROGRESS' | translate }}</h3>
+
+        <div class="timeline">
+          <div *ngFor="let step of steps" class="timeline-step" [class]="stepState(step, order)">
+            <div class="timeline-step__col">
+              <div class="timeline-bubble">
+                <svg *ngIf="stepState(step, order) === 'done'"
+                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+                <svg *ngIf="stepState(step, order) === 'active'"
+                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <svg *ngIf="stepState(step, order) === 'upcoming'"
+                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 12m-4 0a4 4 0 108 0 4 4 0 10-8 0"/>
+                </svg>
+              </div>
+            </div>
+            <div class="timeline-step__content">
+              <div class="timeline-step__title">{{ step.titleKey | translate }}</div>
+              <div class="timeline-step__desc">{{ step.descKey | translate }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,96 @@
+<div class="cart-page">
+  <div class="container">
+
+    <div class="section-heading">
+      <h2>{{ 'CART.TITLE' | translate }}</h2>
+      <div class="divider"></div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="cartService.items().length === 0" class="cart-empty animate-fade-up">
+      <span class="cart-empty__icon">🛒</span>
+      <h3>{{ 'CART.EMPTY_TITLE' | translate }}</h3>
+      <p>{{ 'CART.EMPTY_DESC' | translate }}</p>
+      <a routerLink="/" class="btn btn-primary">{{ 'CART.BROWSE_MENU' | translate }}</a>
+    </div>
+
+    <!-- Cart Layout -->
+    <div *ngIf="cartService.items().length > 0" class="cart-layout animate-fade-up">
+
+      <!-- Items Panel -->
+      <div class="cart-items-panel">
+        <div class="cart-items-panel__header">
+          <h2>{{ 'CART.ORDER_ITEMS' | translate }}</h2>
+          <span>{{ cartService.items().length }} {{ 'CART.ITEMS' | translate }}</span>
+        </div>
+
+        <div class="cart-item" *ngFor="let item of cartService.items()">
+          <!-- Image -->
+          <div class="cart-item__image">
+            <img [src]="item.imageUrl" [alt]="item.nameEn">
+          </div>
+          <!-- Info -->
+          <div class="cart-item__info">
+            <div class="cart-item__name">{{ item.nameEn }}</div>
+            <div class="cart-item__unit-price">${{ item.price }} {{ 'CART.EACH' | translate }}</div>
+            <!-- Controls -->
+            <div class="cart-item__controls">
+              <button class="qty-btn" (click)="cartService.decrement(item.id)">−</button>
+              <span class="qty-value">{{ item.quantity }}</span>
+              <button class="qty-btn" (click)="cartService.increment(item.id)">+</button>
+            </div>
+          </div>
+          <!-- Subtotal -->
+          <div class="cart-item__subtotal">${{ (item.price * item.quantity) | number:'1.2-2' }}</div>
+          <!-- Remove -->
+          <button class="cart-item__remove" (click)="cartService.remove(item.id)">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary Panel -->
+      <div class="cart-summary">
+        <h3>{{ 'CART.ORDER_SUMMARY' | translate }}</h3>
+
+        <!-- Promo -->
+        <div class="promo-box">
+          <input type="text" class="form-input"
+            [placeholder]="'CART.PROMO_PLACEHOLDER' | translate">
+          <button class="btn btn-ghost btn-sm">{{ 'CART.PROMO_APPLY' | translate }}</button>
+        </div>
+
+        <div class="summary-row">
+          <span>{{ 'CART.SUBTOTAL' | translate }}</span>
+          <span>${{ cartService.subtotal() | number:'1.2-2' }}</span>
+        </div>
+        <div class="summary-row">
+          <span>{{ 'CART.DELIVERY_FEE' | translate }}</span>
+          <span>${{ cartService.delivery() | number:'1.2-2' }}</span>
+        </div>
+        <div class="summary-row" *ngIf="cartService.discount() > 0">
+          <span>{{ 'CART.DISCOUNT' | translate }}</span>
+          <span style="color: #16a34a">−${{ cartService.discount() | number:'1.2-2' }}</span>
+        </div>
+        <div class="summary-row total">
+          <span>{{ 'CART.TOTAL' | translate }}</span>
+          <span>${{ cartService.total() | number:'1.2-2' }}</span>
+        </div>
+
+        <a routerLink="/checkout" class="btn btn-primary btn-full btn-lg" style="margin-top:1.5rem">
+          {{ 'CART.PROCEED_TO_CHECKOUT' | translate }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a routerLink="/" class="btn btn-ghost btn-full" style="margin-top:0.75rem">
+          {{ 'CART.CONTINUE_SHOPPING' | translate }}
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
