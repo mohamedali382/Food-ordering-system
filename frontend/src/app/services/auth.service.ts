@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError } from 'rxjs';
 import { throwError } from 'rxjs';
+import { environment } from '../../environments/environment'; 
 
 export interface LoginResponse {
   access_token: string;
@@ -23,7 +24,7 @@ export interface User {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/auth';
+  private apiUrl = environment.apiUrl;
   currentUser = signal<User | null>(this.getUserFromLocalStorage());
   isAuthenticated = signal<boolean>(!!this.getToken());
 
