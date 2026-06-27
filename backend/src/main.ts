@@ -10,6 +10,7 @@ async function bootstrap() {
       'http://localhost:4200',
       'http://localhost:3000',
       'https://food-ordering-system.vercel.app',
+      'https://food-ordering-system-pncyu5twy-mohamedali382s-projects.vercel.app',
     ],
     credentials: true,
   });
