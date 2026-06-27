@@ -22,7 +22,7 @@ export interface Order {
   providedIn: 'root',
 })
 export class OrderService {
-    private apiUrl = environment.apiUrl;
+  private apiUrl = `${environment.apiUrl}/orders`;
 
   constructor(private http: HttpClient) {}
 
