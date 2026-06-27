@@ -6,7 +6,11 @@ async function bootstrap() {
 
   // Enable CORS for frontend communication
   app.enableCors({
-    origin: ['http://localhost:4200', 'http://localhost:3000'],
+    origin: [
+      'http://localhost:4200',
+      'http://localhost:3000',
+      'https://food-ordering-system.vercel.app',
+    ],
     credentials: true,
   });
 
